@@ -12,7 +12,7 @@ use App\Http\Controllers\ProjectController;
 //     return view('welcome');
 // });
 
-Route::get('/', [PortfolioController::class, 'index'])->name('portfolio.index');
+Route::get('/', [AdminProfileController::class, 'index'])->name('portfolio.index');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

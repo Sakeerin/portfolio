@@ -10,4 +10,5 @@ class Project extends Model
     protected $casts = [
         'technologies' => 'array',
     ];
+    
 }

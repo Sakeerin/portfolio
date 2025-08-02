@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Profile;
+use App\Models\Education;
+use App\Models\Skill;
+use App\Models\Experience;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -13,7 +17,27 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        //
+        $profile = Profile::first();
+        
+        if (!$profile) {
+            // Create a default profile if none exists
+            $profile = Profile::create([
+                'name' => 'Your Name',
+                'title' => 'Your Title',
+                'about' => 'About yourself...',
+                'email' => 'your.email@example.com',
+                'phone' => '',
+                'address' => '',
+            ]);
+        }
+        
+        return view('portfolio.index', [
+            'profile' => $profile,
+            'educations' => Education::all(),
+            'skills' => Skill::all(),
+            'experiences' => Experience::all(),
+            'projects' => Project::all(),
+        ]);
     }
 
     /**
