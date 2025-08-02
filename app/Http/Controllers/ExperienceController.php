@@ -12,7 +12,8 @@ class ExperienceController extends Controller
      */
     public function index()
     {
-        //
+        $experiences = Experience::all();
+        return view('admin.experiences.index', compact('experiences'));
     }
 
     /**
@@ -20,7 +21,7 @@ class ExperienceController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.experiences.create');
     }
 
     /**
@@ -28,7 +29,15 @@ class ExperienceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'position' => 'required',
+            'company' => 'required',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date',
+            'description' => 'nullable',
+        ]);
+        Experience::create($request->all());
+        return redirect()->route('admin.experiences.index')->with('success', 'Experience added!');
     }
 
     /**
@@ -36,7 +45,7 @@ class ExperienceController extends Controller
      */
     public function show(Experience $experience)
     {
-        //
+        // 
     }
 
     /**
@@ -44,7 +53,7 @@ class ExperienceController extends Controller
      */
     public function edit(Experience $experience)
     {
-        //
+        return view('admin.experiences.edit', compact('experience'));
     }
 
     /**
@@ -52,7 +61,15 @@ class ExperienceController extends Controller
      */
     public function update(Request $request, Experience $experience)
     {
-        //
+        $request->validate([
+            'position' => 'required',
+            'company' => 'required',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date',
+            'description' => 'nullable',
+        ]);
+        $experience->update($request->all());
+        return redirect()->route('admin.experiences.index')->with('success', 'Experience updated!');
     }
 
     /**
@@ -60,6 +77,7 @@ class ExperienceController extends Controller
      */
     public function destroy(Experience $experience)
     {
-        //
+        $experience->delete();
+        return redirect()->route('admin.experiences.index')->with('success', 'Experience deleted!');
     }
 }
