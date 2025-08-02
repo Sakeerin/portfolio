@@ -12,7 +12,8 @@ class EducationController extends Controller
      */
     public function index()
     {
-        //
+        $educations = Education::orderByDesc('start_year')->get();
+        return view('admin.educations.index', compact('educations'));
     }
 
     /**
@@ -20,7 +21,7 @@ class EducationController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.educations.create');
     }
 
     /**
@@ -28,7 +29,18 @@ class EducationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'school' => 'required|string|max:255',
+            'degree' => 'required|string|max:255',
+            'major' => 'nullable|string|max:255',
+            'start_year' => 'nullable|string|max:10',
+            'end_year' => 'nullable|string|max:10',
+        ]);
+
+        Education::create($validated);
+
+        return redirect()->route('admin.educations.index')
+            ->with('success', 'Education added successfully!');
     }
 
     /**
@@ -44,7 +56,7 @@ class EducationController extends Controller
      */
     public function edit(Education $education)
     {
-        //
+        return view('admin.educations.edit', compact('education'));
     }
 
     /**
@@ -52,7 +64,18 @@ class EducationController extends Controller
      */
     public function update(Request $request, Education $education)
     {
-        //
+        $validated = $request->validate([
+            'school' => 'required|string|max:255',
+            'degree' => 'required|string|max:255',
+            'major' => 'nullable|string|max:255',
+            'start_year' => 'nullable|string|max:10',
+            'end_year' => 'nullable|string|max:10',
+        ]);
+
+        $education->update($validated);
+
+        return redirect()->route('admin.educations.index')
+            ->with('success', 'Education updated successfully!');
     }
 
     /**
@@ -60,6 +83,9 @@ class EducationController extends Controller
      */
     public function destroy(Education $education)
     {
-        //
+        $education->delete();
+
+        return redirect()->route('admin.educations.index')
+            ->with('success', 'Education deleted successfully!');
     }
 }
