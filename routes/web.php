@@ -34,4 +34,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('projects', ProjectController::class);
 });
 
+Route::fallback(function () {
+    return redirect()->route('portfolio.index');
+});
+
 require __DIR__.'/auth.php';

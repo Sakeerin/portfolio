@@ -12,7 +12,7 @@
     
     <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        @method('PUT')
+        @method('PATCH')
         
         <div class="mb-4">
             <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name</label>
@@ -70,11 +70,18 @@
         
         <div class="mb-4">
             <label for="photo" class="block text-sm font-medium text-gray-700 mb-2">Photo</label>
+            
+            @if($profile->photo)
+                <div class="mb-3">
+                    <p class="text-sm text-gray-600 mb-2">Current photo:</p>
+                    <img src="{{ asset('storage/'.$profile->photo) }}" alt="Profile Photo" 
+                         class="w-32 h-32 object-cover rounded-lg border border-gray-300 shadow-sm">
+                </div>
+            @endif
+            
             <input type="file" name="photo" id="photo" 
                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" accept="image/*">
-            @if($profile->photo)
-                <p class="text-sm text-gray-500 mt-1">Current photo: {{ $profile->photo }}</p>
-            @endif
+            <p class="text-xs text-gray-500 mt-1">Leave empty to keep current photo</p>
             @error('photo')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror

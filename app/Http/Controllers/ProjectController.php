@@ -59,7 +59,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return view('admin.projects.edit', compact('project'));
+        // 
     }
 
     /**
@@ -67,7 +67,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        return view('admin.projects.edit', compact('project'));
     }
 
     /**
