@@ -12,7 +12,8 @@ class SkillController extends Controller
      */
     public function index()
     {
-        //
+        $skills = Skill::orderBy('category')->orderBy('name')->get();
+        return view('admin.skills.index', compact('skills'));
     }
 
     /**
@@ -20,7 +21,7 @@ class SkillController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.skills.create');
     }
 
     /**
@@ -28,7 +29,15 @@ class SkillController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+        ]);
+
+        Skill::create($validated);
+
+        return redirect()->route('admin.skills.index')
+            ->with('success', 'Skill added successfully!');
     }
 
     /**
@@ -44,7 +53,7 @@ class SkillController extends Controller
      */
     public function edit(Skill $skill)
     {
-        //
+        return view('admin.skills.edit', compact('skill'));
     }
 
     /**
@@ -52,7 +61,15 @@ class SkillController extends Controller
      */
     public function update(Request $request, Skill $skill)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+        ]);
+
+        $skill->update($validated);
+
+        return redirect()->route('admin.skills.index')
+            ->with('success', 'Skill updated successfully!');
     }
 
     /**
@@ -60,6 +77,9 @@ class SkillController extends Controller
      */
     public function destroy(Skill $skill)
     {
-        //
+        $skill->delete();
+
+        return redirect()->route('admin.skills.index')
+            ->with('success', 'Skill deleted successfully!');
     }
 }

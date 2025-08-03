@@ -26,7 +26,8 @@ Route::middleware('auth')->group(function () {
 
 // Admin, protected
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('profile', AdminProfileController::class)->only(['edit', 'update']);
+    Route::get('profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('profile/update', [AdminProfileController::class, 'update'])->name('profile.update');
     Route::resource('educations', EducationController::class);
     Route::resource('skills', SkillController::class);
     Route::resource('experiences', ExperienceController::class);

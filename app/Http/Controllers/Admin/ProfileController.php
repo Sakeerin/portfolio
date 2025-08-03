@@ -67,17 +67,62 @@ class ProfileController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Profile $profile)
+    public function edit()
     {
-        //
+        $profile = Profile::first();
+        
+        if (!$profile) {
+            // Create a default profile if none exists
+            $profile = Profile::create([
+                'name' => 'Your Name',
+                'title' => 'Your Title',
+                'about' => 'About yourself...',
+                'email' => 'your.email@example.com',
+                'phone' => '',
+                'address' => '',
+            ]);
+        }
+        
+        return view('admin.profile.edit', compact('profile'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Profile $profile)
+    public function update(Request $request)
     {
-        //
+        $profile = Profile::first();
+        
+        if (!$profile) {
+            return redirect()->route('admin.profile.edit')
+                ->with('error', 'Profile not found!');
+        }
+        
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
+            'about' => 'required|string',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('photo')) {
+            // Delete old photo if exists
+            if ($profile->photo) {
+                \Storage::disk('public')->delete($profile->photo);
+            }
+            
+            // Store new photo
+            $photoPath = $request->file('photo')->store('profile-photos', 'public');
+            $validated['photo'] = $photoPath;
+        }
+
+        $profile->update($validated);
+
+        return redirect()->route('admin.profile.edit')
+            ->with('success', 'Profile updated successfully!');
     }
 
     /**
